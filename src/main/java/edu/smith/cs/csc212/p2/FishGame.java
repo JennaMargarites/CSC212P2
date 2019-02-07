@@ -24,6 +24,11 @@ public class FishGame {
 	 */
 	FishHome home;
 	/**
+	 * The snails
+	 */
+	Snail snailOne;
+	Snail snailTwo;
+	/**
 	 * These are the missing fish!
 	 */
 	List<Fish> missing;
@@ -32,6 +37,11 @@ public class FishGame {
 	 * These are fish we've found!
 	 */
 	List<Fish> found;
+	
+	/**
+	 * This is the number of rocks in our game
+	 */
+	final int NUM_ROCKS = 10;
 	
 	/**
 	 * Number of steps!
@@ -57,13 +67,14 @@ public class FishGame {
 		// Add a home!
 		home = world.insertFishHome();
 		
-		// TODO(lab) Generate some more rocks!
-		// TODO(lab) Make 5 into a constant, so it's easier to find & change.
-		for (int i=0; i<5; i++) {
+		//Make some rocks
+		for (int i=0; i<NUM_ROCKS; i++) {
 			world.insertRockRandomly();
 		}
 		
-		// TODO(lab) Make the snail!
+		//Make some snails
+		snailOne = new Snail(world);
+		snailTwo = new Snail(world);
 		
 		// Make the player out of the 0th fish color.
 		player = new Fish(0, world);
@@ -141,7 +152,7 @@ public class FishGame {
 		for (Fish lost : missing) {
 			// 30% of the time, lost fish move randomly.
 			if (rand.nextDouble() < 0.3) {
-				// TODO(lab): What goes here?
+				lost.moveRandomly();
 			}
 		}
 	}
