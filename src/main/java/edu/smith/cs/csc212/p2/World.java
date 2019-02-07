@@ -145,7 +145,7 @@ public class World {
 	 * @return the Rock.
 	 */
 	public Rock insertRockRandomly() {
-		Rock r = new Rock(this);
+		Rock r = new FallingRock(this);
 		insertRandomly(r);
 		return r;
 	}
@@ -226,11 +226,14 @@ public class World {
 	 * @param followers a set of objects to follow the leader.
 	 */
 	public static void objectsFollow(WorldObject target, List<? extends WorldObject> followers) {
-		// TODO(P2) Comment this method!
 		// What is recentPositions?
+			//an arrayList containing the last positions of the target/player fish piece
 		// What is followers?
+			//an arrayList containing of all the fish the player piece has found 
 		// What is target?
+			//target is the leader of the fish line, or rather the player piece that is moving
 		// Why is past = putWhere[i+1]? Why not putWhere[i]?
+			//because the target/player fish takes up the first spot in the recent positions arrayList
 		List<IntPoint> putWhere = new ArrayList<>(target.recentPositions);
 		for (int i=0; i<followers.size(); i++) {
 			IntPoint past = putWhere.get(i+1);

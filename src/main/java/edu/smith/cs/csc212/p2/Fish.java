@@ -18,13 +18,12 @@ public class Fish extends WorldObject {
 	public static Color[] COLORS = {
 			Color.red,
 			Color.green,
-			Color.yellow,
+			Color.pink,
 			Color.cyan,
 			Color.magenta,
-			Color.orange,
 			
 			// TODO: (P2) Maybe make a special fish that is more points?
-		
+			Color.getHSBColor(176, 143, 38)
 	};
 	/**
 	 * This is an index into the {@link #COLORS} array.
@@ -41,7 +40,12 @@ public class Fish extends WorldObject {
 	public void markAsPlayer() {
 		this.player = true;
 	}
-
+	
+	/**
+	 * Whether or not this is a fastScared fish. fastScared fish 
+	 * move with higher probabilities than normal fish.
+	 */
+	boolean fastScared;
 
 	/**
 	 * A Fish knows what World it belongs to, because all WorldObjects do.
@@ -51,8 +55,15 @@ public class Fish extends WorldObject {
 	public Fish(int color, World world) {
 		super(world);
 		this.color = color;
+		this.fastScared = rand.nextBoolean();
 	}
-	
+	/**
+	 * Gives us the fastScared value of a fish
+	 * @return fastScared value of a fish
+	 */
+	public boolean getFastScared() {
+		return this.fastScared;
+	}
 	/**
 	 * What actual color is this fish? We store an index, so get it here.
 	 * @return the Color object from our array.
