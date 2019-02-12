@@ -22,12 +22,16 @@ public class FishGame {
 	/**
 	 * The home location.
 	 */
-	FishHome home;
+	FishHome maison;
 	/**
 	 * The snails
 	 */
 	Snail snailOne;
 	Snail snailTwo;
+	/**
+	 * Random instance
+	 */
+	Random rand;
 	/**
 	 * These are the missing fish!
 	 */
@@ -37,6 +41,11 @@ public class FishGame {
 	 * These are fish we've found!
 	 */
 	List<Fish> found;
+	
+	/**
+	 * These are fish we've returned home
+	 */
+	List<Fish> home;
 	
 	/**
 	 * This is the number of rocks in our game
@@ -63,9 +72,10 @@ public class FishGame {
 		
 		missing = new ArrayList<Fish>();
 		found = new ArrayList<Fish>();
+		home = new ArrayList<Fish>();
 		
 		// Add a home!
-		home = world.insertFishHome();
+		maison = world.insertFishHome();
 		
 		//Make some rocks
 		for (int i=0; i<NUM_ROCKS; i++) {
@@ -81,7 +91,7 @@ public class FishGame {
 		// Make the player out of the 0th fish color.
 		player = new Fish(0, world);
 		// Start the player at "home".
-		player.setPosition(home.getX(), home.getY());
+		player.setPosition(maison.getX(), maison.getY());
 		player.markAsPlayer();
 		world.register(player);
 		
@@ -106,8 +116,8 @@ public class FishGame {
 	 * @return true if the player has won (or maybe lost?).
 	 */
 	public boolean gameOver() {
-		// TODO(P2) We want to bring the fish home before we win!
-		return missing.isEmpty();
+		
+		return missing.isEmpty() && found.isEmpty();
 	}
 
 	/**
@@ -128,12 +138,36 @@ public class FishGame {
 			if (missing.contains(wo)) {
 				// Remove this fish from the missing list.
 				missing.remove(wo);
-				
 				// Add this fish to the found list
 				found.add((Fish) wo);
-				
+
 				// Increase score when you find a fish!
-				score += 10;
+				if(((Fish) wo).getFastScared()) {
+					score += 25;
+				}
+				else {
+					score += 10;
+				}
+			}
+			// Return fish home
+			if (wo instanceof FishHome) {
+				for(Fish foundFish : found) {
+					home.add(foundFish);
+					world.remove(foundFish);
+				}
+				this.found.removeAll(home);
+			}
+		}
+		// List of all things at the home position
+		List<WorldObject> overlapAtHome = this.maison.findSameCell();
+		// If a fish is at the home position, it should be added to the home list
+		for (WorldObject wo : overlapAtHome) {
+			// It is missing if it's in our missing list.
+			if (missing.contains(wo)) {
+				// Remove this fish from the missing list.
+				missing.remove(wo);
+				// Add this fish to home list
+				home.add((Fish) wo);
 			}
 		}
 		
@@ -171,10 +205,14 @@ public class FishGame {
 	 * @param y - the y-tile.
 	 */
 	public void click(int x, int y) {
-		// TODO(P2) use this print to debug your World.canSwim changes!
 		System.out.println("Clicked on: "+x+","+y+ " world.canSwim(player,...)="+world.canSwim(player, x, y));
 		List<WorldObject> atPoint = world.find(x, y);
-		// TODO(P2) allow the user to click and remove rocks.
+		for (int i = atPoint.size() - 1; i >= 0; i--) {
+			WorldObject wo = atPoint.get(i);
+			if(wo instanceof Rock) {
+				wo.remove();
+			}
+		}
 
 	}
 	

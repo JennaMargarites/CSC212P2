@@ -16,14 +16,13 @@ public class Fish extends WorldObject {
 	 * A fish is only special because of its color now!
 	 */
 	public static Color[] COLORS = {
-			Color.red,
-			Color.green,
+			Color.red, //Player Color
+			
+			Color.green, //Lost fish colors
 			Color.pink,
 			Color.cyan,
 			Color.magenta,
-			
-			// TODO: (P2) Maybe make a special fish that is more points?
-			Color.getHSBColor(176, 143, 38)
+
 	};
 	/**
 	 * This is an index into the {@link #COLORS} array.
@@ -33,6 +32,11 @@ public class Fish extends WorldObject {
 	 * Whether or not this is the player;
 	 */
 	boolean player = false;
+	
+	/**
+	 * number of points a lost fish is worth
+	 */
+	int numPoints;
 	
 	/**
 	 * Called only on the Fish that is the player!
